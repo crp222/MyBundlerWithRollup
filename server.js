@@ -1,15 +1,19 @@
 const express = require('express');
 const app = express();
-const bundle = require("./bundler.js");
-const memBundle = require("./membundle.js");
+const bundle = require("./mybundler/bundler.js");
+const memBundle = require("./mybundler/membundle.js");
 const path = require("path");
-const {getFiles} = require("./utils.js");
-const fs = require("fs");
+const {getFiles} = require("./mybundler/utils.js");
+const customRouter = require("./router.js");
 
-const DEVELOPMENT = true;
+///////////////////////////////////////////
+//               CONFIG                 //
+const DEVELOPMENT = false;
+///////////////////////////////////////////
+
+app.use(customRouter);
 
 var buildDirFiles = [];
-
 if(DEVELOPMENT){
     app.get("/",(req,res)=>{
         memBundle.build().then(()=>{
@@ -17,6 +21,7 @@ if(DEVELOPMENT){
         });
     })
 
+    // static serving
     app.get("*",(req,res)=>{
         let url = "build"+req.url;
         let memFile = memBundle.getFiles().find(file => file.path == url);
@@ -25,6 +30,14 @@ if(DEVELOPMENT){
             if(memFile.type == "javascript"){
                 content = fixImportPath(content);
                 res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+            }else {
+                res.setHeader('Content-Type',`${memFile.type}; charset=UTF-8`);
+            }        
+            if(memFile.type == "text/html"){
+                memBundle.build().then(()=>{
+                    res.send(`${content}`);
+                });
+                return;
             }
             res.send(`${content}`);
             return;
@@ -32,6 +45,8 @@ if(DEVELOPMENT){
         if(buildDirFiles.includes(url))
             res.sendFile(path.join(__dirname,url));
     })
+
+    
 }else {
     app.get("/",(req,res)=>{
         res.sendFile(path.join(__dirname,"build/index.html"));
@@ -54,7 +69,6 @@ async function run() {
     });
 }
 run();
-
 
 function fixImportPath(content) {
     let lines = content.split("\n");

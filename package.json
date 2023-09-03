@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "dev" : "node server.js"
   },
   "author": "Simon T",
   "license": "ISC",
