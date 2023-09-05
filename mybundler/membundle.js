@@ -12,7 +12,6 @@ const inputOptions = {
     input : {},
     external:[],
     plugins : [
-        commonjs(),
         babel({ 
             presets: ['@babel/preset-react'],
             babelHelpers:"bundled",

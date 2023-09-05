@@ -18,13 +18,65 @@ body {
 
 
 .home {
-    margin-top: 30vh;
+    margin-top: 10vh;
+}
+
+.panelcontainer {
     display: flex;
     gap: 5px;
     flex-wrap: wrap;
 }
 
 .panel {
-    border: 1px white solid;
     border-radius: 10px;
+}
+
+.switch {
+    position:absolute;
+    z-index: 1;
+    left: 50%;
+    transform: translate(-50%,-100px);
+}
+
+.switch > button {
+    margin: 10px;
+    color: white;
+    background-color: transparent;
+    border-radius: 100%;
+    border: 1px white solid;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+}
+
+.switch > button:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+:root {
+    --fade-in : 100%;
+    --fade-out : -100%;
+}
+
+.fade-enter .panelcontainer {
+    opacity: 0;
+    transform: translateX(var(--fade-in));
+}
+.fade-enter-active .panelcontainer {
+    opacity: 1;
+    transform: translateX(0%);
+}
+.fade-exit .panelcontainer {
+    opacity: 1;
+    transform: translateX(0%);
+}
+.fade-exit-active .panelcontainer {
+    opacity: 0;
+    transform: translateX(var(--fade-out));
+}
+.fade-enter-active .panelcontainer,
+.fade-exit-active .panelcontainer {
+    transition: opacity 500ms, transform 500ms;
 }
