@@ -45,14 +45,14 @@ function getInputFiles() {
         else {
             let buildf = f.replace("src","build")
             let content = fs.readFileSync(f,"utf-8");
-            let type = "text/plain";
+            let type = "none";
             if((""+buildf).endsWith(".css")) 
                 type = "text/css";
             if((""+buildf).endsWith(".html"))
                 type = "text/html";
-               
             
-            files.push({path:buildf,content:content,type:type});
+            if(type != "none")
+                files.push({path:buildf,content:content,type:type});
         }
     })
 }
