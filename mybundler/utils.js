@@ -57,7 +57,7 @@ function findModule(moduleName,matchingModules,noDefaultExport){
     matchingModules.forEach(m => {
       if(!m.includes("/cjs/") && !m.includes("/_virtual/")) {
           let content = fs.readFileSync(m,"utf-8");
-          let regex = new RegExp(`(export)[^a-zA-Z]{1,}(${moduleName != "_" ? moduleName : "[a-zA-Z]{1,}"})[^a-zA-Z]`);
+          let regex = new RegExp(`(export)[^a-zA-Z]{1,}(${moduleName})`);
           if(regex.test(content)){
               goodModules.push(m);
           }
@@ -131,7 +131,8 @@ function fixImportPath(content,buildDirFiles) {
           let module = line.split("'")[1];
           if(!module.startsWith(".")){
             if(!line.includes("from")){
-              line = `import _ from '${module}'`;
+              lines[i] = "";
+              return;
             }
             let methods = line.split("from")[0];
             methods = methods.replace("import ","").replaceAll(" ","");
