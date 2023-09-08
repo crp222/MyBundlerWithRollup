@@ -67,9 +67,7 @@ if(DEVELOPMENT){
     Object.entries(routes).forEach(e=>{
         const [k,v] = e;
         app.get(k,(req,res)=>{
-            memBundle.build().then(()=>{
-                res.sendFile(path.join("build",v));
-            });
+            res.sendFile(path.join("build",v));
         })  
     })
     app.get("*",(req,res)=>{
